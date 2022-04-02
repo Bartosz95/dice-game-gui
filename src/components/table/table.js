@@ -1,15 +1,21 @@
 import React from "react"
-import { ListGroup } from 'react-bootstrap';
+import { ListGroup, Badge, Container } from 'react-bootstrap';
 
 export const Table = props => {
     const table = []
     for (const [name, value] of Object.entries(props.player.table)) {
-        table.push(<li class="list-group-item" key={name}>Figure {name} {value || 'not selected'}</li>)
+        const result = <Badge bg="primary" pill>{value}</Badge>
+        table.push(
+        <ListGroup.Item key={name} as="li" action variant="secondary" >
+                Figure {name} {value ? result : ''}
+        </ListGroup.Item>)
     }
-    return <ListGroup className={`list-group list-group-horizontal`}>
+    return <Container>
         Table for player {props.player.id}
-            {table}
+            <ListGroup as="ul">
+                {table}
             </ListGroup>
+            </Container>
 }
 
 export default Table
