@@ -4,10 +4,12 @@ import { ListGroup, Badge, Container } from 'react-bootstrap';
 export const Table = props => {
     const table = []
     for (const [name, value] of Object.entries(props.player.table)) {
+        
         const result = <Badge bg="primary" pill>{value}</Badge>
         table.push(
-        <ListGroup.Item key={name} as="li" action variant="secondary" >
-                Figure {name} {value ? result : ''}
+        <ListGroup.Item as="li" action variant="secondary" key={`p${props.player.id}f${name}`}
+        onClick={() => props.markFigureTochose(name)} >
+            Figure {name} {value ? result : ''}
         </ListGroup.Item>)
     }
     return <Container>
