@@ -1,11 +1,11 @@
 import React, { Component } from "react";
 
-import { Container, Row, Col, Button, ButtonGroup, ListGroup } from 'react-bootstrap';
+import { Container, Button, ButtonGroup, ListGroup } from 'react-bootstrap';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './game.css'
 import Dice from '../dice/dice'
-import Table from '../table/table'
+import GameTable from '../table/GameTable'
 import Tip from '../alerts/Tip'
 import ErrorReqest from '../alerts/ErrorReqest'
 
@@ -113,7 +113,7 @@ export default class Game extends Component {
     }
 
     markFigureTochose(figureID) {
-        this.setState({ chosenFigure: figureID })
+        this.setState({ chosenFigure: this.state.chosenFigure === figureID ? null : figureID })
     }
 
     async choseFigure() {
@@ -155,7 +155,7 @@ export default class Game extends Component {
 
     render() {
         const mug = this.state.mug.map(dice => <Dice key={dice.id} dice_props={dice} markDiceToRoll={this.markDiceToRoll.bind(this)}/> ) 
-        const tables = <Row key='table'>{this.state.players.map(player => <Col><Table key={player.id} player={player} markFigureTochose={this.markFigureTochose.bind(this)}/></Col> )}</Row>
+        const table = <GameTable players={this.state.players} currentPlayer={this.state.currentPlayer} chosenFigure={this.state.chosenFigure} markFigureTochose={this.markFigureTochose.bind(this)}/>
         const alert = this.state.tip ? <Tip elems={this.state.tip} /> : ''
         const errorReqest = this.state.error ? <ErrorReqest elems={this.state.error} /> : ''
         return ( 
@@ -178,7 +178,7 @@ export default class Game extends Component {
                     <Button onClick={this.rollTheDices.bind(this)} variant="warning">Roll chosen dices</Button>
                     <Button onClick={this.choseFigure.bind(this)} variant="warning">Save chosen figure</Button>
                 </ButtonGroup>
-                {tables}
+                {table}
                 </Container>
             </div>
         )
