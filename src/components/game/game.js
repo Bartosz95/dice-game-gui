@@ -159,7 +159,7 @@ export default class Game extends Component {
         const alert = this.state.tip ? <Tip elems={this.state.tip} /> : ''
         const errorReqest = this.state.error ? <ErrorReqest elems={this.state.error} /> : ''
         return ( 
-            <div className="table">
+            <div>
                 <Container>
                 <h1>Player: {this.state.currentPlayer}</h1>
                 <ListGroup>
@@ -174,9 +174,9 @@ export default class Game extends Component {
                 {alert}
                 {errorReqest}
                 {mug}
-                <ButtonGroup vertical>
-                    <Button onClick={this.rollTheDices.bind(this)} variant="warning">Roll chosen dices</Button>
-                    <Button onClick={this.choseFigure.bind(this)} variant="warning">Save chosen figure</Button>
+                <ButtonGroup vertical aria-label="Basic example">
+                    <Button onClick={this.rollTheDices.bind(this)} variant="outline-success">Roll chosen dices</Button>
+                    <Button onClick={this.choseFigure.bind(this)} variant="outline-success">Save chosen figure</Button>
                 </ButtonGroup>
                 {table}
                 </Container>

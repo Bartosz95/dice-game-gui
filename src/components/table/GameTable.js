@@ -18,16 +18,17 @@ export const GameTable = props => {
     }
 
     const getStyle = (player, figure, props) => {
+        const cellStyle = ' table-success'
         if (isFigureSelected(player, figure, props)){
-            return ' table-warning'
+            return cellStyle + ' selected-cell'
         } else if (canBeSelected(player, figure, props)) {
-            return ' table-success'
+            return cellStyle + ' can-be-select-cell'
         } 
         return ''
        
     }
 
-    const selectedIcon = <CloseButton disabled />
+    const selectedIcon = ' × ' 
     if (props.players[0]) {
         for(const player of props.players) {
             head.push(
@@ -54,7 +55,7 @@ export const GameTable = props => {
         }
     }
 
-    return <Table striped bordered hover>
+    return <Table bordered >
                 <thead><tr>{head}</tr></thead>
                 <tbody>{body}</tbody>
             </Table>
