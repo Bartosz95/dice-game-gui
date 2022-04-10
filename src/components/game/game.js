@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Container, Button, ButtonGroup, ListGroup } from 'react-bootstrap';
+import { Container, Button, ButtonGroup, ListGroup, Row, Col } from 'react-bootstrap';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './game.css'
@@ -53,10 +53,13 @@ export default class Game extends Component {
             mug.push({
                 id: gameID,
                 value: value,
-                roll: this.state.numberOfRoll == 0
+                roll: this.state.numberOfRoll === 0
             })
         }
         this.setState({ mug: mug })
+
+        this.setState({ dicesToChange: [] })
+        this.setState({ chosenFigure: null })
     }
 
     componentDidMount() {
@@ -135,39 +138,44 @@ export default class Game extends Component {
                         markFigureTochose={this.markFigureTochose.bind(this)}
                     />
         const alertMessage = this.state.alertMessage ? <AlertMessage elems={this.state.alertMessage} /> : ''
-        return ( 
-            <div>
-                <Container>
-                <h1>Player: {this.state.currentPlayer}</h1>
-                <ListGroup>
-                    <ListGroup.Item>Players: [{this.state.playerIDs.map(id => ` ${id}, `)} ]</ListGroup.Item>
-                    <ListGroup.Item>Active game: {this.state.isActive ? 'yes' : 'No'} </ListGroup.Item>
-                    <ListGroup.Item>Roll: {this.state.numberOfRoll} </ListGroup.Item>
-                    <ListGroup.Item>Turn: {this.state.numberOfTurn} </ListGroup.Item>
-                    <ListGroup.Item>Game ID: {this.state.gameID} </ListGroup.Item>
-                    <ListGroup.Item>Chosen dices: {this.state.dicesToChange.map(id => `[${id}]`)}</ListGroup.Item>
-                    <ListGroup.Item>Chosen figure: {this.state.chosenFigure} </ListGroup.Item>
-                </ListGroup>
+        return ( <Container fluid className="dice-game-container">
                 {alertMessage}
-                {mug}
-                <ButtonGroup vertical aria-label="Basic example">
-                    <Button 
-                        onClick={this.rollTheDices.bind(this)} 
-                        variant={(this.state.numberOfRoll === 0) || (this.state.dicesToChange.length === 0) ? "outline-success" : "success"} 
-                        disabled={(this.state.numberOfRoll === 3) || (this.state.dicesToChange.length === 0)}>
-                    Roll dices
-                    </Button>
-                    <Button 
-                        onClick={this.choseFigure.bind(this)} 
-                        variant={this.state.chosenFigure ? "success" : "outline-success"} 
-                        disabled={(this.state.numberOfRoll === 0) || !this.state.chosenFigure}>
-                    Save figure
-                    </Button>
-                </ButtonGroup>
-                {table}
-                </Container>
-            </div>
-        )
-        ;
+                <Row>
+                    <Col>
+                    <Row><h1>Player: {this.state.currentPlayer}</h1></Row>
+                    <Row>{mug}</Row>
+                    <Row>
+                        <ButtonGroup aria-label="Basic example">
+                        <Button 
+                            onClick={this.rollTheDices.bind(this)} 
+                            variant={(this.state.numberOfRoll === 0) || (this.state.dicesToChange.length !== 0) ?  "success" : "outline-success"} 
+                            disabled={(this.state.numberOfRoll === 3) || ((this.state.dicesToChange.length === 0) && (this.state.numberOfRoll !== 0))}>
+                        Roll dices
+                        </Button>
+                        <Button 
+                            onClick={this.choseFigure.bind(this)} 
+                            variant={this.state.chosenFigure ? "success" : "outline-success"} 
+                            disabled={(this.state.numberOfRoll === 0) || !this.state.chosenFigure}>
+                        Save figure
+                        </Button>
+                        </ButtonGroup>
+                    </Row>
+                    <Row>
+                    <ListGroup >
+                            <ListGroup.Item>Players: [{this.state.playerIDs.map(id => ` ${id}, `)} ]</ListGroup.Item>
+                            <ListGroup.Item>Active game: {this.state.isActive ? 'yes' : 'No'} </ListGroup.Item>
+                            <ListGroup.Item>Roll: {this.state.numberOfRoll} </ListGroup.Item>
+                            <ListGroup.Item>Turn: {this.state.numberOfTurn} </ListGroup.Item>
+                            <ListGroup.Item>Game ID: {this.state.gameID} </ListGroup.Item>
+                            <ListGroup.Item>Chosen dices: {this.state.dicesToChange.map(id => `[${id}]`)}</ListGroup.Item>
+                            <ListGroup.Item>Chosen figure: {this.state.chosenFigure} </ListGroup.Item>
+                    </ListGroup>
+                    </Row>
+                    </Col>
+                    <Col>
+                        {table}
+                    </Col>
+                </Row>
+        </Container>)
     }
 }
