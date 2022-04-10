@@ -1,13 +1,11 @@
 import React, { Component } from "react";
-
 import { Container, Button, ButtonGroup, ListGroup } from 'react-bootstrap';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './game.css'
 import Dice from '../dice/dice'
 import GameTable from '../table/GameTable'
-import Tip from '../alerts/Tip'
-import ErrorReqest from '../alerts/ErrorReqest'
+import AlertMessage from '../alerts/AlertMessage'
 
 
 
@@ -22,11 +20,9 @@ export default class Game extends Component {
         playerIDs: [],
         players: [],
         gameID: null,
-
         dicesToChange: [],
         chosenFigure: null,
-        tip: null,
-        error: null
+        alertMessage: null
     }
 
     async getGame() {
@@ -38,6 +34,9 @@ export default class Game extends Component {
         this.setState({ indexOfFirstPlayer: game.indexOfFirstPlayer });
         this.setState({ isActive: game.isActive });
         this.setState({ numberOfRoll: game.numberOfRoll });
+        if(this.state.numberOfRoll === 0) {
+            this.setState({ dicesToChange: ['0','1','2','3','4'] })
+        }
         this.setState({ numberOfTurn: game.numberOfTurn });
         this.setState({ playerIDs: game.playerIDs });
         const players = []
@@ -54,7 +53,7 @@ export default class Game extends Component {
             mug.push({
                 id: gameID,
                 value: value,
-                roll: false
+                roll: this.state.numberOfRoll == 0
             })
         }
         this.setState({ mug: mug })
@@ -65,6 +64,7 @@ export default class Game extends Component {
     }
 
     markDiceToRoll(diceID) {
+        if((this.state.numberOfRoll === 0) || (this.state.numberOfRoll === 3)) return;
         const dice = this.state.mug.find(dice => dice.id === diceID)
         dice.roll = !dice.roll
         if(dice.roll) {
@@ -86,30 +86,14 @@ export default class Game extends Component {
             // todo change playerID and gameID later 
             const response = await fetch(`${process.env.REACT_APP_DICE_GAME_API}/user/${this.state.currentPlayer}/game/${this.state.gameID}`, requestOptions)
             const body = await response.json();
-            if(body.tip) {
-                this.setState({ tip: body })
-            } else  if(body.error) {
-                this.setState({ error: body })
+            if((body.level === 'warning') || (body.level === 'error')) {
+                this.setState({ alertMessage: body })
             } else {
-                this.setState({ tip: null })
-                this.setState({ error: null })
-                const mug = []
-                const game = body
-                this.setState({ numberOfRoll: game.numberOfRoll });
-                for (const [diceID, value] of Object.entries(game.mug)) {
-                    mug.push({
-                        id: diceID,
-                        value: value,
-                        roll: false
-                    })
-                }
-                this.setState({ mug: mug })
+                this.getGame()
             }
         } catch (err) {
-            this.setState({ error: { error: err.message }})
+            this.setState({ level: 'error', alertMessage: { error: err.message }})
         }
-        this.setState({ dicesToChange: [] })
-        this.setState({ chosenFigure: null })
     }
 
     markFigureTochose(figureID) {
@@ -126,38 +110,31 @@ export default class Game extends Component {
             // todo change playerID and gameID later 
             const response = await fetch(`${process.env.REACT_APP_DICE_GAME_API}/user/${this.state.currentPlayer}/game/${this.state.gameID}`, requestOptions)
             const body = await response.json();
-            if(body.tip) {
-                this.setState({ tip: body })
-            } else  if(body.error) {
-                this.setState({ error: body })
+            if((body.level === 'warning') || (body.level === 'error')) {
+                this.setState({ alertMessage: body })
             } else {
-                this.setState({ tip: null })
-                this.setState({ error: null })
-                const game = body
-                this.setState({ currentPlayer: game.currentPlayer });
-                this.setState({ indexOfFirstPlayer: game.indexOfFirstPlayer });
-                this.setState({ isActive: game.isActive });
-                this.setState({ numberOfRoll: game.numberOfRoll });
-                this.setState({ numberOfTurn: game.numberOfTurn });
-                const players = []
-                for (const [playerID, table] of Object.entries(game.players)) {
-                    players.push({
-                        id: playerID,
-                        table: table.table,
-                    })
-                }
-                this.setState({ players: players });
+                this.getGame()
             }
         } catch (err) {
-            this.setState({ error: { error: err.message }})
+            this.setState({ level: 'error', alertMessage: { error: err.message }})
         }
     }
 
     render() {
-        const mug = this.state.mug.map(dice => <Dice key={dice.id} dice_props={dice} markDiceToRoll={this.markDiceToRoll.bind(this)}/> ) 
-        const table = <GameTable players={this.state.players} currentPlayer={this.state.currentPlayer} chosenFigure={this.state.chosenFigure} markFigureTochose={this.markFigureTochose.bind(this)}/>
-        const alert = this.state.tip ? <Tip elems={this.state.tip} /> : ''
-        const errorReqest = this.state.error ? <ErrorReqest elems={this.state.error} /> : ''
+        const mug = this.state.mug.map(dice => 
+            <Dice 
+                key={dice.id} 
+                dice_props={dice} 
+                numberOfRoll={this.state.numberOfRoll} 
+                markDiceToRoll={this.markDiceToRoll.bind(this)}
+            />)
+        const table = <GameTable 
+                        players={this.state.players} 
+                        currentPlayer={ this.state.numberOfRoll === 0 ? null : this.state.currentPlayer} 
+                        chosenFigure={this.state.chosenFigure} 
+                        markFigureTochose={this.markFigureTochose.bind(this)}
+                    />
+        const alertMessage = this.state.alertMessage ? <AlertMessage elems={this.state.alertMessage} /> : ''
         return ( 
             <div>
                 <Container>
@@ -171,12 +148,21 @@ export default class Game extends Component {
                     <ListGroup.Item>Chosen dices: {this.state.dicesToChange.map(id => `[${id}]`)}</ListGroup.Item>
                     <ListGroup.Item>Chosen figure: {this.state.chosenFigure} </ListGroup.Item>
                 </ListGroup>
-                {alert}
-                {errorReqest}
+                {alertMessage}
                 {mug}
                 <ButtonGroup vertical aria-label="Basic example">
-                    <Button onClick={this.rollTheDices.bind(this)} variant="outline-success">Roll chosen dices</Button>
-                    <Button onClick={this.choseFigure.bind(this)} variant="outline-success">Save chosen figure</Button>
+                    <Button 
+                        onClick={this.rollTheDices.bind(this)} 
+                        variant={(this.state.numberOfRoll === 0) || (this.state.dicesToChange.length === 0) ? "outline-success" : "success"} 
+                        disabled={(this.state.numberOfRoll === 3) || (this.state.dicesToChange.length === 0)}>
+                    Roll dices
+                    </Button>
+                    <Button 
+                        onClick={this.choseFigure.bind(this)} 
+                        variant={this.state.chosenFigure ? "success" : "outline-success"} 
+                        disabled={(this.state.numberOfRoll === 0) || !this.state.chosenFigure}>
+                    Save figure
+                    </Button>
                 </ButtonGroup>
                 {table}
                 </Container>
