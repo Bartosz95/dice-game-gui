@@ -4,7 +4,7 @@ import './dice.css'
 
 export const Dice = props => {
     return <Button onClick={() => props.markDiceToRoll(props.dice_props.id)} 
-                    variant={((props.numberOfRoll === 0) || (props.numberOfRoll === 3)) ? "outline-success" : "success" } 
+                    variant={((props.numberOfRoll === 0) || (props.numberOfRoll === 3)) ? "outline-secondary" : "success" } 
                     className={` dice${props.dice_props.roll ? ' diceToRoll' : ''}`}
                     id={props.dice_props.id}
                     disabled={(props.numberOfRoll === 0) || (props.numberOfRoll === 3)} >

@@ -148,23 +148,26 @@ export default class Game extends Component {
                         <ButtonGroup aria-label="Basic example">
                         <Button 
                             onClick={this.rollTheDices.bind(this)} 
-                            variant={(this.state.numberOfRoll === 0) || (this.state.dicesToChange.length !== 0) ?  "success" : "outline-success"} 
-                            disabled={(this.state.numberOfRoll === 3) || ((this.state.dicesToChange.length === 0) && (this.state.numberOfRoll !== 0))}>
-                        Roll dices
+                            variant={(this.state.numberOfRoll === 0) || (this.state.dicesToChange.length !== 0) ?  "success" : "outline-secondary"} 
+                            disabled={(this.state.numberOfRoll === 3) || ((this.state.dicesToChange.length === 0) && this.state.numberOfRoll !== 0)}>
+                            {this.state.chosenFigure ? "You cannot roll dices if you chose a figure" : 
+                            (this.state.numberOfRoll === 3 ? "You don't have next roll" : 
+                            (this.state.numberOfRoll === 0 ? "Roll all dices" : 
+                            (this.state.numberOfRoll !== 0 ? "Choose the dices to roll" : 
+                            `Roll the dices ${this.state.numberOfRoll} time`)))}
                         </Button>
                         <Button 
                             onClick={this.choseFigure.bind(this)} 
-                            variant={this.state.chosenFigure ? "success" : "outline-success"} 
+                            variant={this.state.chosenFigure ? "success" : "outline-secondary"} 
                             disabled={(this.state.numberOfRoll === 0) || !this.state.chosenFigure}>
-                        Save figure
+                                {this.state.numberOfRoll === 0 ? "You have to roll all dices" : 
+                                (this.state.chosenFigure ? "Save figure" : "Choose figure to save")}
                         </Button>
                         </ButtonGroup>
                     </Row>
                     <Row>
                     <ListGroup >
-                            <ListGroup.Item>Players: [{this.state.playerIDs.map(id => ` ${id}, `)} ]</ListGroup.Item>
-                            <ListGroup.Item>Active game: {this.state.isActive ? 'yes' : 'No'} </ListGroup.Item>
-                            <ListGroup.Item>Roll: {this.state.numberOfRoll} </ListGroup.Item>
+                            <ListGroup.Item>Roll:  </ListGroup.Item>
                             <ListGroup.Item>Turn: {this.state.numberOfTurn} </ListGroup.Item>
                             <ListGroup.Item>Game ID: {this.state.gameID} </ListGroup.Item>
                             <ListGroup.Item>Chosen dices: {this.state.dicesToChange.map(id => `[${id}]`)}</ListGroup.Item>
