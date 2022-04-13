@@ -146,8 +146,8 @@ export default class Game extends Component {
                         <Col><h1>Player: {this.state.currentPlayer}</h1></Col>
                         <Col><Badge pill bg="secondary" className="turn">Turn: {this.state.numberOfTurn}</Badge></Col>
                     </Row>
-                    <Row>{mug}</Row>
-                    <Row>
+                    <Row className="mug">{mug}</Row>
+                    <Row className="buttons">
                         <ButtonGroup aria-label="Basic example">
                         <Button 
                             onClick={this.rollTheDices.bind(this)} 
