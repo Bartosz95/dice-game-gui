@@ -2,4 +2,12 @@
     width: 85%;
     margin-top: 2%;
     background-color: rgb(255, 255, 255);
+    
+}
+
+.turn {
+    width: 130px;
+    height: 40px;
+    font-size: 15px;
+    padding-top: 12px;
 }

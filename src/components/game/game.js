@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Container, Button, ButtonGroup, ListGroup, Row, Col } from 'react-bootstrap';
+import { Container, Button, ButtonGroup, ListGroup, Row, Col, Badge } from 'react-bootstrap';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './game.css'
@@ -99,11 +99,11 @@ export default class Game extends Component {
         }
     }
 
-    markFigureTochose(figureID) {
+    markFigureTochoose(figureID) {
         this.setState({ chosenFigure: this.state.chosenFigure === figureID ? null : figureID })
     }
 
-    async choseFigure() {
+    async chooseFigure() {
         try {
             const requestOptions = {
                 method: 'POST',
@@ -135,14 +135,17 @@ export default class Game extends Component {
                         players={this.state.players} 
                         currentPlayer={ this.state.numberOfRoll === 0 ? null : this.state.currentPlayer} 
                         chosenFigure={this.state.chosenFigure} 
-                        markFigureTochose={this.markFigureTochose.bind(this)}
+                        markFigureTochoose={this.markFigureTochoose.bind(this)}
                     />
         const alertMessage = this.state.alertMessage ? <AlertMessage elems={this.state.alertMessage} /> : ''
         return ( <Container fluid className="dice-game-container">
                 {alertMessage}
                 <Row>
                     <Col>
-                    <Row><h1>Player: {this.state.currentPlayer}</h1></Row>
+                    <Row>
+                        <Col><h1>Player: {this.state.currentPlayer}</h1></Col>
+                        <Col><Badge pill bg="secondary" className="turn">Turn: {this.state.numberOfTurn}</Badge></Col>
+                    </Row>
                     <Row>{mug}</Row>
                     <Row>
                         <ButtonGroup aria-label="Basic example">
@@ -150,29 +153,21 @@ export default class Game extends Component {
                             onClick={this.rollTheDices.bind(this)} 
                             variant={(this.state.numberOfRoll === 0) || (this.state.dicesToChange.length !== 0) ?  "success" : "outline-secondary"} 
                             disabled={(this.state.numberOfRoll === 3) || ((this.state.dicesToChange.length === 0) && this.state.numberOfRoll !== 0)}>
-                            {this.state.chosenFigure ? "You cannot roll dices if you chose a figure" : 
+                            {this.state.chosenFigure ? "You cannot roll dices if you choose a figure" : 
                             (this.state.numberOfRoll === 3 ? "You don't have next roll" : 
                             (this.state.numberOfRoll === 0 ? "Roll all dices" : 
-                            (this.state.numberOfRoll !== 0 ? "Choose the dices to roll" : 
-                            `Roll the dices ${this.state.numberOfRoll} time`)))}
+                            (this.state.dicesToChange.length === 0 ? "Choose dices to roll" : 
+                            (this.state.numberOfRoll === 2 ? "Roll dices secound time" : "Roll dices last time"))))}
                         </Button>
                         <Button 
-                            onClick={this.choseFigure.bind(this)} 
+                            onClick={this.chooseFigure.bind(this)} 
                             variant={this.state.chosenFigure ? "success" : "outline-secondary"} 
                             disabled={(this.state.numberOfRoll === 0) || !this.state.chosenFigure}>
                                 {this.state.numberOfRoll === 0 ? "You have to roll all dices" : 
-                                (this.state.chosenFigure ? "Save figure" : "Choose figure to save")}
+                                (this.state.chosenFigure ? "Save figure" : 
+                                "Choose figure to save")}
                         </Button>
                         </ButtonGroup>
-                    </Row>
-                    <Row>
-                    <ListGroup >
-                            <ListGroup.Item>Roll:  </ListGroup.Item>
-                            <ListGroup.Item>Turn: {this.state.numberOfTurn} </ListGroup.Item>
-                            <ListGroup.Item>Game ID: {this.state.gameID} </ListGroup.Item>
-                            <ListGroup.Item>Chosen dices: {this.state.dicesToChange.map(id => `[${id}]`)}</ListGroup.Item>
-                            <ListGroup.Item>Chosen figure: {this.state.chosenFigure} </ListGroup.Item>
-                    </ListGroup>
                     </Row>
                     </Col>
                     <Col>

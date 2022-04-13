@@ -1,5 +1,5 @@
 import React from "react"
-import { Table, CloseButton } from 'react-bootstrap';
+import { Table } from 'react-bootstrap';
 import './GameTable.css'
 
 export const GameTable = props => {
@@ -43,7 +43,7 @@ export const GameTable = props => {
             for(const player of props.players) {
                 row.push(
                     <td key={`p${player.id}f${figure}`} 
-                    onClick={player.id === props.currentPlayer ? () => props.markFigureTochose(figure) : dummyfcn}
+                    onClick={player.id === props.currentPlayer ? () => props.markFigureTochoose(figure) : dummyfcn}
                     className={`my-row-style ${getStyle(player, figure, props)}`}
                     >
                         {isFigureSelected(player, figure, props) ? selectedIcon : ''}
