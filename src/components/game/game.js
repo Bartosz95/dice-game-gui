@@ -157,7 +157,7 @@ export default class Game extends Component {
                             (this.state.numberOfRoll === 3 ? "You don't have next roll" : 
                             (this.state.numberOfRoll === 0 ? "Roll all dices" : 
                             (this.state.dicesToChange.length === 0 ? "Choose dices to roll" : 
-                            (this.state.numberOfRoll === 2 ? "Roll dices secound time" : "Roll dices last time"))))}
+                            (this.state.numberOfRoll === 1 ? "Roll dices secound time" : "Roll dices last time"))))}
                         </Button>
                         <Button 
                             onClick={this.chooseFigure.bind(this)} 
