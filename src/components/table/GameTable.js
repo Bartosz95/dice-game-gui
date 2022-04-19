@@ -10,7 +10,7 @@ export const GameTable = props => {
     const dummyfcn = () => {}
 
     const canBeSelected = (player, figure, props) => {
-        return (player.id === props.currentPlayer) && (player.table[figure] === null) && (figure !== 'bonus') && (figure !== 'sum') && (figure !== 'total')
+        return (player.id === props.currentPlayer) && (player.table[figure] === null) && (figure !== 'bonus') && (figure !== 'to_bonus') && (figure !== 'total')
     }
 
     const isFigureSelected = (player, figure, props) => {

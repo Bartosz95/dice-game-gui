@@ -26,7 +26,7 @@ export default class Game extends Component {
     }
 
     async getGame() {
-        const response = await fetch(`${process.env.REACT_APP_DICE_GAME_API}/user/1/game/6249a4e96fa532d7972c34cd`)
+        const response = await fetch(`${process.env.REACT_APP_DICE_GAME_API}/user/1/game/625eff287df0d639823c9ff0`)
         let body = await response.json();
         this.setState( {gameID: body._id });
         const game = body.game
