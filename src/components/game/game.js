@@ -3,10 +3,10 @@ import { Container, Button, Row, Col, Badge } from 'react-bootstrap';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './game.css'
-import Dice from '../dice/dice'
-import GameTable from '../table/GameTable'
-import AlertMessage from '../alerts/AlertMessage'
-import WinMessage from "../winMessage/WinMessage";
+import Dice from './dice/dice'
+import GameTable from './table/GameTable'
+import AlertMessage from './alerts/AlertMessage'
+import WinMessage from "./winMessage/WinMessage";
 
 
 
