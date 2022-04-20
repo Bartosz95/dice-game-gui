@@ -1,11 +1,12 @@
 import React, { Component } from "react";
-import { Container, Button, ButtonGroup, ListGroup, Row, Col, Badge } from 'react-bootstrap';
+import { Container, Button, Row, Col, Badge } from 'react-bootstrap';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './game.css'
 import Dice from '../dice/dice'
 import GameTable from '../table/GameTable'
 import AlertMessage from '../alerts/AlertMessage'
+import WinMessage from "../winMessage/WinMessage";
 
 
 
@@ -26,7 +27,7 @@ export default class Game extends Component {
     }
 
     async getGame() {
-        const response = await fetch(`${process.env.REACT_APP_DICE_GAME_API}/user/1/game/625eff287df0d639823c9ff0`)
+        const response = await fetch(`${process.env.REACT_APP_DICE_GAME_API}/user/1/game/625f1ded2ae44f698f6c7dae`)
         let body = await response.json();
         this.setState( {gameID: body._id });
         const game = body.game
@@ -70,12 +71,13 @@ export default class Game extends Component {
         if((this.state.numberOfRoll === 0) || (this.state.numberOfRoll === 3)) return;
         const dice = this.state.mug.find(dice => dice.id === diceID)
         dice.roll = !dice.roll
+        let dicesToChange = []
         if(dice.roll) {
-            this.state.dicesToChange.push(diceID)
+            dicesToChange.push(diceID)
         } else {
-            this.state.dicesToChange = this.state.dicesToChange.filter( id => id !== diceID )
+            dicesToChange = this.state.dicesToChange.filter( id => id !== diceID )
         }
-        this.setState({ dicesToChange: this.state.dicesToChange})
+        this.setState({ dicesToChange: dicesToChange})
         this.setState({ mug: this.state.mug})
     }
 
@@ -138,36 +140,38 @@ export default class Game extends Component {
                         markFigureTochoose={this.markFigureTochoose.bind(this)}
                     />
         const alertMessage = this.state.alertMessage ? <AlertMessage elems={this.state.alertMessage} /> : ''
+        const winMessage = this.state.isActive ? '' : <WinMessage elems={this.state.players} />
         return ( <Container fluid className="dice-game-container">
                 {alertMessage}
+                <Row>{winMessage}</Row>
                 <Row>
                     <Col>
+                    
                     <Row>
                         <Col><h1>Player: {this.state.currentPlayer}</h1></Col>
                         <Col><Badge pill bg="secondary" className="turn">Turn: {this.state.numberOfTurn}</Badge></Col>
                     </Row>
+                    
                     <Row className="mug">{mug}</Row>
-                    <Row className="buttons">
-                        <ButtonGroup aria-label="Basic example">
-                        <Button 
-                            onClick={this.rollTheDices.bind(this)} 
-                            variant={(this.state.numberOfRoll === 0) || (this.state.dicesToChange.length !== 0) ?  "success" : "outline-secondary"} 
-                            disabled={(this.state.numberOfRoll === 3) || ((this.state.dicesToChange.length === 0) && this.state.numberOfRoll !== 0)}>
-                            {this.state.chosenFigure ? "You cannot roll dices if you choose a figure" : 
-                            (this.state.numberOfRoll === 3 ? "You don't have next roll" : 
-                            (this.state.numberOfRoll === 0 ? "Roll all dices" : 
-                            (this.state.dicesToChange.length === 0 ? "Choose dices to roll" : 
-                            (this.state.numberOfRoll === 1 ? "Roll dices secound time" : "Roll dices last time"))))}
-                        </Button>
-                        <Button 
-                            onClick={this.chooseFigure.bind(this)} 
-                            variant={this.state.chosenFigure ? "success" : "outline-secondary"} 
-                            disabled={(this.state.numberOfRoll === 0) || !this.state.chosenFigure}>
-                                {this.state.numberOfRoll === 0 ? "You have to roll all dices" : 
-                                (this.state.chosenFigure ? "Save figure" : 
-                                "Choose figure to save")}
-                        </Button>
-                        </ButtonGroup>
+                    <Row>
+                        <Col><Button 
+                                onClick={this.rollTheDices.bind(this)} 
+                                variant={(this.state.numberOfRoll === 0) || (this.state.dicesToChange.length !== 0) ?  "success" : "outline-secondary"} 
+                                disabled={(this.state.numberOfRoll === 3) || ((this.state.dicesToChange.length === 0) && this.state.numberOfRoll !== 0)}>
+                                {this.state.chosenFigure ? "You cannot roll dices if you choose a figure" : 
+                                (this.state.numberOfRoll === 3 ? "You don't have next roll" : 
+                                (this.state.numberOfRoll === 0 ? "Roll all dices" : 
+                                (this.state.dicesToChange.length === 0 ? "Choose dices to roll" : 
+                                (this.state.numberOfRoll === 1 ? "Roll dices secound time" : "Roll dices last time"))))}
+                            </Button></Col>
+                            <Col><Button 
+                                onClick={this.chooseFigure.bind(this)} 
+                                variant={this.state.chosenFigure ? "success" : "outline-secondary"} 
+                                disabled={(this.state.numberOfRoll === 0) || !this.state.chosenFigure}>
+                                    {this.state.numberOfRoll === 0 ? "You have to roll all dices" : 
+                                    (this.state.chosenFigure ? "Save figure" : 
+                                    "Choose figure to save")}
+                            </Button></Col>
                     </Row>
                     </Col>
                     <Col>

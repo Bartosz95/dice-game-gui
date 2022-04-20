@@ -1,7 +1,7 @@
 import React from "react"
 import { Alert } from 'react-bootstrap';
 
-export const AlertMessage = props => {
+const AlertMessage = props => {
     return <Alert variant="warning">{props.elems.message}</Alert>
 }
 
