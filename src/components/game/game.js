@@ -126,58 +126,73 @@ export default class Game extends Component {
     }
 
     render() {
-        const mug = this.state.mug.map(dice => 
-            <Dice 
-                key={dice.id} 
-                dice_props={dice} 
-                numberOfRoll={this.state.numberOfRoll} 
-                markDiceToRoll={this.markDiceToRoll.bind(this)}
-            />)
-        const table = <GameTable 
-                        players={this.state.players} 
-                        currentPlayer={ this.state.numberOfRoll === 0 ? null : this.state.currentPlayer} 
-                        chosenFigure={this.state.chosenFigure} 
-                        markFigureTochoose={this.markFigureTochoose.bind(this)}
-                    />
+
         const alertMessage = this.state.alertMessage ? <AlertMessage elems={this.state.alertMessage} /> : ''
-        const winMessage = this.state.isActive ? '' : <WinMessage elems={this.state.players} />
-        return ( <Container fluid className="dice-game-container">
-                {alertMessage}
-                <Row>{winMessage}</Row>
+
+        const mug = this.state.mug.map(dice => <Dice 
+            key={dice.id} 
+            dice_props={dice} 
+            numberOfRoll={this.state.numberOfRoll} 
+            markDiceToRoll={this.markDiceToRoll.bind(this)}
+        />)
+
+        const rollTheDicesButton = <Button 
+            onClick={this.rollTheDices.bind(this)} 
+            variant={(this.state.numberOfRoll === 0) || (this.state.dicesToChange.length !== 0) ?  "success" : "outline-secondary"} 
+            disabled={(this.state.numberOfRoll === 3) || ((this.state.dicesToChange.length === 0) && this.state.numberOfRoll !== 0)}>
+            {this.state.chosenFigure ? "You cannot roll dices if you choose a figure" : 
+            (this.state.numberOfRoll === 3 ? "You don't have next roll" : 
+            (this.state.numberOfRoll === 0 ? "Roll all dices" : 
+            (this.state.dicesToChange.length === 0 ? "Choose dices to roll" : 
+            (this.state.numberOfRoll === 1 ? "Roll dices secound time" : "Roll dices last time"))))}
+        </Button>
+
+        const chooseFigureButton = <Button 
+            onClick={this.chooseFigure.bind(this)} 
+            variant={this.state.chosenFigure ? "success" : "outline-secondary"} 
+            disabled={(this.state.numberOfRoll === 0) || !this.state.chosenFigure}>
+                {this.state.numberOfRoll === 0 ? "You have to roll all dices" : 
+                (this.state.chosenFigure ? "Save figure" : 
+                "Choose figure to save")}
+        </Button>
+
+        const play = <div>
+            <Row>
+                <Col><h1>Player: {this.state.currentPlayer}</h1></Col>
+                <Col><Badge pill bg="secondary" className="turn">Turn: {this.state.numberOfTurn}</Badge></Col>
+            </Row>
+            <Row className="mug">{mug}</Row>
                 <Row>
-                    <Col>
-                    
-                    <Row>
-                        <Col><h1>Player: {this.state.currentPlayer}</h1></Col>
-                        <Col><Badge pill bg="secondary" className="turn">Turn: {this.state.numberOfTurn}</Badge></Col>
-                    </Row>
-                    
-                    <Row className="mug">{mug}</Row>
-                    <Row>
-                        <Col><Button 
-                                onClick={this.rollTheDices.bind(this)} 
-                                variant={(this.state.numberOfRoll === 0) || (this.state.dicesToChange.length !== 0) ?  "success" : "outline-secondary"} 
-                                disabled={(this.state.numberOfRoll === 3) || ((this.state.dicesToChange.length === 0) && this.state.numberOfRoll !== 0)}>
-                                {this.state.chosenFigure ? "You cannot roll dices if you choose a figure" : 
-                                (this.state.numberOfRoll === 3 ? "You don't have next roll" : 
-                                (this.state.numberOfRoll === 0 ? "Roll all dices" : 
-                                (this.state.dicesToChange.length === 0 ? "Choose dices to roll" : 
-                                (this.state.numberOfRoll === 1 ? "Roll dices secound time" : "Roll dices last time"))))}
-                            </Button></Col>
-                            <Col><Button 
-                                onClick={this.chooseFigure.bind(this)} 
-                                variant={this.state.chosenFigure ? "success" : "outline-secondary"} 
-                                disabled={(this.state.numberOfRoll === 0) || !this.state.chosenFigure}>
-                                    {this.state.numberOfRoll === 0 ? "You have to roll all dices" : 
-                                    (this.state.chosenFigure ? "Save figure" : 
-                                    "Choose figure to save")}
-                            </Button></Col>
-                    </Row>
-                    </Col>
-                    <Col>
-                        {table}
-                    </Col>
-                </Row>
-        </Container>)
+                <Col>
+                    {rollTheDicesButton}
+                </Col>
+                <Col>
+                    {chooseFigureButton}
+                </Col>
+            </Row>
+        </div>
+
+        const winMessage = <WinMessage elems={this.state.players} />
+
+        const table = <div>
+            <GameTable 
+                players={this.state.players} 
+                currentPlayer={ this.state.numberOfRoll === 0 ? null : this.state.currentPlayer} 
+                chosenFigure={this.state.chosenFigure} 
+                markFigureTochoose={this.markFigureTochoose.bind(this)}
+            />
+        </div>
+
+        return <Container fluid className="dice-game-container">
+            {alertMessage}
+            <Row>
+                <Col>
+                    {this.state.isActive ? play : winMessage }
+                </Col>
+                <Col>
+                    {table}
+                </Col>
+            </Row>
+        </Container>
     }
 }

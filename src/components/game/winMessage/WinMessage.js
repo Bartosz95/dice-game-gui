@@ -15,7 +15,7 @@ const WinMessage = props => {
         }
     })
     
-    return <Modal.Dialog>
+    return <Modal.Dialog bg="success">
                 <Modal.Header >
                     <Modal.Title>CONGRATULATIONS !</Modal.Title>
                 </Modal.Header>
