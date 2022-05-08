@@ -8,9 +8,8 @@ import GameTable from './table/GameTable'
 import AlertMessage from './alerts/AlertMessage'
 import WinMessage from "./winMessage/WinMessage";
 
-
-
 export default class Game extends Component {
+    
     state = {
         currentPlayer: null,
         indexOfFirstPlayer: null,
@@ -27,7 +26,8 @@ export default class Game extends Component {
     }
 
     async getGame() {
-        const response = await fetch(`${process.env.REACT_APP_DICE_GAME_API}/user/1/game/625f1ded2ae44f698f6c7dae`)
+
+        const response = await fetch(`${process.env.REACT_APP_DICE_GAME_API}/user/1/game/6269a20f9ac7b2241521cd39`)
         let body = await response.json();
         this.setState( {gameID: body._id });
         const game = body.game
