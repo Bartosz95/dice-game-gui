@@ -1,14 +1,13 @@
 import React from 'react';
 import { Button } from 'react-bootstrap';
+import './logout.css'
 
-const Logout = keycloak => {
-
-    console.log(keycloak.keycloak)
+export default props => {
     return <Button 
-        onClick={ () => keycloak.keycloak.logout() }
+        className='logoutButton' 
+        onClick={ () => props.keycloak.logout() }
         variant='secondary'>
             Logout
     </Button>
-
 }
-export default Logout
+

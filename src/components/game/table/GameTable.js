@@ -5,7 +5,6 @@ import './GameTable.css'
 export const GameTable = props => {
     const head = []
     const body = []
-    console.log(props)
     head.push(<th key='#'></th>)
     const dummyfcn = () => {}
 

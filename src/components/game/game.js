@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { Container, Button, Row, Col, Badge } from 'react-bootstrap';
 
-import 'bootstrap/dist/css/bootstrap.min.css';
 import './game.css'
 import Dice from './dice/dice'
 import GameTable from './table/GameTable'

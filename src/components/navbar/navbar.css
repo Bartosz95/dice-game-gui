@@ -7,6 +7,11 @@ img {
     width: auto;
 }
 
+.nav {
+    margin-top: 5px;
+}
+
 .navLink {
+    text-align: center;
     font-size: x-large;
 }
