@@ -3,8 +3,8 @@ import { BrowserRouter, Routes, Route, Navigate  } from 'react-router-dom';
 import keycloak from './libs/keycloak';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-import Welcome from './components/welcome/welcome';
-import Home from './components/homeGame/homeGame';
+import Login from './components/login/login';
+import Home from './components/home/home';
 
 class App extends Component {
 
@@ -36,8 +36,8 @@ class App extends Component {
   render() {
     return <BrowserRouter>
       <Routes>
-        <Route path="/welcome" element={ keycloak.authenticated ? <Navigate to="/" /> : <Welcome keycloak={this.state.keycloak}/>} />
-        <Route path="/" element={ keycloak.authenticated ? <Home keycloak={this.state.keycloak}/> : <Navigate to="/welcome" /> } />
+        <Route path="/login" element={ keycloak.authenticated ? <Navigate to="/" /> : <Login keycloak={this.state.keycloak}/>} />
+        <Route path="/" element={ keycloak.authenticated ? <Home keycloak={this.state.keycloak}/> : <Navigate to="/login" /> } />
       </Routes>
     </BrowserRouter>
   }

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Stack, Button } from 'react-bootstrap';
-import './welcome.css'
+import './login.css'
 
 
 const description = "I would like to invate you to play in dice game. You can play with other user or alone. The rules are vary simply. (...)"
