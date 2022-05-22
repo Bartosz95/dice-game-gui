@@ -3,20 +3,26 @@ import { DropdownButton, Dropdown, Button } from 'react-bootstrap';
 import './userBar.css'
 class UserBar extends Component {
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      name: "",
-      keycloak: ""
-    };
-    this.props.keycloak.loadUserInfo().then(userInfo => {
-        this.setState({name: userInfo.preferred_username, keycloak: props.keycloak})
-    });
+  state = { 
+    username: null,
+  };
+
+  async load() {
+    try {
+      const userinfo = await this.props.keycloak.loadUserInfo()
+      this.setState({ username: userinfo.preferred_username})
+    } catch (err) {
+      console.log(err)
+    }
+   
   }
 
+  componentDidMount() {
+    this.load()
+  }
   render() {
-    return <DropdownButton variant='secondary' title={this.state.name} className="userBar">
-      <Dropdown.Item onClick={ () => this.state.keycloak.logout() }>Logout</Dropdown.Item>
+    return <DropdownButton variant='secondary' title={this.state.username || ''} className="userBar">
+      <Dropdown.Item onClick={ () => this.props.keycloak.logout() }>Logout</Dropdown.Item>
       
     </DropdownButton >
   }

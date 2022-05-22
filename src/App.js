@@ -1,57 +1,45 @@
 import React, { Component } from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate  } from 'react-router-dom';
 import keycloak from './libs/keycloak';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import Welcome from './components/welcome/welcome';
-import HomeGame from './components/homeGame/homeGame';
+import Home from './components/homeGame/homeGame';
 
 class App extends Component {
 
-  constructor(props) {
-    super(props);
-    this.state = { 
-      keycloak: keycloak, 
-      authenticated: false
-    };
-  }
+  state = { 
+    keycloak: keycloak
+  };
 
-  login() {
-    keycloak.init({
-      onLoad: 'check-sso',
-      silentCheckSsoRedirectUri: window.location.origin + '/silent-check-sso.html'
-    }).then(authenticated => {
-      if(authenticated) {
-        this.setState({ authenticated: authenticated })
+  async load() {
+    try {
+      const authenticated = await keycloak.init({
+        onLoad: 'check-sso',
+        silentCheckSsoRedirectUri: window.location.origin + '/silent-check-sso.html'
+      })
+      if(keycloak.authenticated) {
+        this.setState({ authenticated: authenticated, keycloak: keycloak})
       } else {
-        keycloak.login()
+        console.log("not auth")
       }
-    })
+    } catch (err) {
+      console.log(err)
+    }
   }
 
   componentDidMount() {
-    keycloak.init({
-      onLoad: 'check-sso',
-      silentCheckSsoRedirectUri: window.location.origin + '/silent-check-sso.html'
-    }).then(authenticated => {
-      if(authenticated) {
-        this.setState({ authenticated: authenticated })
-      } else {
-        window.location.replace('/welcome')
-      }
-    })
+    this.load()
   }
   
 
   render() {
-    return (
-      <BrowserRouter>
+    return <BrowserRouter>
       <Routes>
-        <Route path="/welcome" element={<Welcome state={this.state.authenticated} login={this.login.bind(this)}/>} />
-        <Route path="/" element={ <HomeGame loadUserInfo={this.state.keycloak.loadUserInfo.bind(this)} /> } />
+        <Route path="/welcome" element={ keycloak.authenticated ? <Navigate to="/" /> : <Welcome keycloak={this.state.keycloak}/>} />
+        <Route path="/" element={ keycloak.authenticated ? <Home keycloak={this.state.keycloak}/> : <Navigate to="/welcome" /> } />
       </Routes>
-      </BrowserRouter>
-    );
+    </BrowserRouter>
   }
 }
 export default App;
