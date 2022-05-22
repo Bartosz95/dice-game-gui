@@ -2,7 +2,7 @@ import React from "react"
 import { Modal } from 'react-bootstrap';
 import './WinMessage.css'
 
-const WinMessage = props => {
+export default props => {
     const players = props.elems
     let winnersId = [];
     let score = 0
@@ -25,4 +25,3 @@ const WinMessage = props => {
                 </Modal.Body>
             </Modal.Dialog>
 }
-export default WinMessage

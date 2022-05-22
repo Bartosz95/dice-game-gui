@@ -25,20 +25,9 @@ export default class Game extends Component {
     }
 
     async getGame() {
-
         const response = await fetch(`${process.env.REACT_APP_DICE_GAME_API}/user/1/game/6269a20f9ac7b2241521cd39`)
         let body = await response.json();
-        this.setState( {gameID: body._id });
         const game = body.game
-        this.setState({ currentPlayer: game.currentPlayer });
-        this.setState({ indexOfFirstPlayer: game.indexOfFirstPlayer });
-        this.setState({ isActive: game.isActive });
-        this.setState({ numberOfRoll: game.numberOfRoll });
-        if(this.state.numberOfRoll === 0) {
-            this.setState({ dicesToChange: ['0','1','2','3','4'] })
-        }
-        this.setState({ numberOfTurn: game.numberOfTurn });
-        this.setState({ playerIDs: game.playerIDs });
         const players = []
         for (const [playerID, value] of Object.entries(game.players)) {
             players.push({
@@ -46,8 +35,6 @@ export default class Game extends Component {
                 table: value.table,
             })
         }
-        this.setState({ players: players });
-
         const mug = []
         for (const [gameID, value] of Object.entries(game.mug)) {
             mug.push({
@@ -56,10 +43,19 @@ export default class Game extends Component {
                 roll: this.state.numberOfRoll === 0
             })
         }
-        this.setState({ mug: mug })
-
-        this.setState({ dicesToChange: [] })
-        this.setState({ chosenFigure: null })
+        this.setState({ 
+            gameID: body._id,
+            currentPlayer: game.currentPlayer,
+            indexOfFirstPlayer: game.indexOfFirstPlayer,
+            isActive: game.isActive,
+            numberOfRoll: game.numberOfRoll,
+            numberOfTurn: game.numberOfTurn,
+            playerIDs: game.playerIDs,
+            players: players,
+            mug: mug,
+            dicesToChange: [],
+            chosenFigure: null
+        });
     }
 
     componentDidMount() {
@@ -76,15 +72,17 @@ export default class Game extends Component {
         } else {
             dicesToChange = this.state.dicesToChange.filter( id => id !== diceID )
         }
-        this.setState({ dicesToChange: dicesToChange})
-        this.setState({ mug: this.state.mug})
+        this.setState({ dicesToChange: dicesToChange, mug: this.state.mug})
     }
 
     async rollTheDices() {
         try {
             const requestOptions = {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Authorization': `bearer ${this.props.keycloak.token}`
+                },
                 body: JSON.stringify({ numbersToChange: this.state.dicesToChange })
             };
             // todo change playerID and gameID later 
@@ -108,7 +106,10 @@ export default class Game extends Component {
         try {
             const requestOptions = {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Authorization': `bearer ${this.props.keycloak.token}`
+                },
                 body: JSON.stringify({ chosenFigure: this.state.chosenFigure })
             };
             // todo change playerID and gameID later 

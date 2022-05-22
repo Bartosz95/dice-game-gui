@@ -2,7 +2,7 @@ import React from "react"
 import { Table } from 'react-bootstrap';
 import './GameTable.css'
 
-export const GameTable = props => {
+export default props => {
     const head = []
     const body = []
     head.push(<th key='#'></th>)
@@ -60,4 +60,3 @@ export const GameTable = props => {
             </Table>
 }
 
-export default GameTable
