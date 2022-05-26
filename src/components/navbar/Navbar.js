@@ -5,7 +5,7 @@ import './navbar.css'
 export default () => {
     return <Nav className="nav">
         <Nav.Item>
-            <Nav.Link  href="/home" className="logo"><img src="img/logo.png"/></Nav.Link>
+            <Nav.Link href="/home" className="logo"><img src="img/logo.png"/></Nav.Link>
         </Nav.Item>
         <Nav.Item>
             <Nav.Link href="/home" className="link-secondary navLink">Home</Nav.Link>

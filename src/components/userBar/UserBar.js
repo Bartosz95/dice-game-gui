@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { DropdownButton, Dropdown, Button } from 'react-bootstrap';
+import { DropdownButton, Dropdown } from 'react-bootstrap';
 import './userBar.css'
 class UserBar extends Component {
 
@@ -23,7 +23,7 @@ class UserBar extends Component {
   render() {
     return <DropdownButton variant='secondary' title={this.state.username || ''} className="userBar">
       <Dropdown.Item onClick={ () => this.props.keycloak.logout() }>Logout</Dropdown.Item>
-      
+      <Dropdown.Item onClick={ () => this.props.keycloak.accountManagement() }>Account</Dropdown.Item>
     </DropdownButton >
   }
 }

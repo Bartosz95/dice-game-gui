@@ -15,13 +15,12 @@ class App extends Component {
   async load() {
     try {
       const authenticated = await keycloak.init({
-        onLoad: 'check-sso',
-        silentCheckSsoRedirectUri: window.location.origin + '/silent-check-sso.html'
+        onLoad: 'check-sso'
       })
       if(keycloak.authenticated) {
-        this.setState({ authenticated: authenticated, keycloak: keycloak})
+        this.setState({ authenticated: authenticated, keycloak: keycloak })
       } else {
-        console.log("not auth")
+        this.setState({ authenticated: false })
       }
     } catch (err) {
       console.log(err)

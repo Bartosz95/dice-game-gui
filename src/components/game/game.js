@@ -25,7 +25,13 @@ export default class Game extends Component {
     }
 
     async getGame() {
-        const response = await fetch(`${process.env.REACT_APP_DICE_GAME_API}/user/1/game/6269a20f9ac7b2241521cd39`)
+        const requestOptions = {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${this.props.keycloak.token}`
+            },
+        };
+        const response = await fetch(`${process.env.REACT_APP_DICE_GAME_API}/user/1/game/6269a20f9ac7b2241521cd39`, requestOptions)
         let body = await response.json();
         const game = body.game
         const players = []
@@ -81,7 +87,7 @@ export default class Game extends Component {
                 method: 'POST',
                 headers: { 
                     'Content-Type': 'application/json',
-                    'Authorization': `bearer ${this.props.keycloak.token}`
+                    'Authorization': `Bearer ${this.props.keycloak.token}`
                 },
                 body: JSON.stringify({ numbersToChange: this.state.dicesToChange })
             };
@@ -108,7 +114,7 @@ export default class Game extends Component {
                 method: 'POST',
                 headers: { 
                     'Content-Type': 'application/json',
-                    'Authorization': `bearer ${this.props.keycloak.token}`
+                    'Authorization': `Bearer ${this.props.keycloak.token}`
                 },
                 body: JSON.stringify({ chosenFigure: this.state.chosenFigure })
             };
