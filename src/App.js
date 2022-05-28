@@ -7,6 +7,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import UserBar from './components/userBar/UserBar';
 import Navbar from './components/navbar/Navbar'
 import Home from './components/home/home';
+import Games from './components/games/games';
+import Create from './components/create/create';
 
 class App extends Component {
 
@@ -14,7 +16,7 @@ class App extends Component {
     keycloak: keycloak
   };
 
-  async load() {
+  async initKeycloak() {
     try {
       await keycloak.init({ onLoad: 'check-sso' })
       
@@ -29,9 +31,8 @@ class App extends Component {
   }
 
   componentDidMount() {
-    this.load()
+    this.initKeycloak()
   }
-  
 
   render() {
     return <div>
@@ -47,6 +48,8 @@ class App extends Component {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={ <Home keycloak={this.state.keycloak}/> } />
+          <Route path="/games" element={ <Games keycloak={this.state.keycloak}/> } />
+          <Route path="/create" element={ <Create keycloak={this.state.keycloak}/> } />
         </Routes>
       </BrowserRouter>
     </div>

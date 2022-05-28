@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 
-export default class Home extends Component {
+export default class Create extends Component {
 
   componentDidMount() {
     
@@ -11,6 +11,6 @@ export default class Home extends Component {
   }
 
   render() {
-        return <div> Here will be a home page </div>
+        return <div> Create Game </div>
   }
 }
