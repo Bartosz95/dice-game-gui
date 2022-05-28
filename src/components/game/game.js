@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Container, Button, Row, Col, Badge } from 'react-bootstrap';
+import { useLocation } from "react-router-dom"
 
 import './game.css'
 import Dice from './dice/dice'
@@ -24,14 +25,14 @@ export default class Game extends Component {
         alertMessage: null
     }
 
-    async getGame() {
+    async getGame(gameID) {
         const requestOptions = {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${this.props.keycloak.token}`
             },
         };
-        const response = await fetch(`${process.env.REACT_APP_DICE_GAME_API}/user/1/game/6269a20f9ac7b2241521cd39`, requestOptions)
+        const response = await fetch(`${process.env.REACT_APP_DICE_GAME_API}/user/1/game/${gameID}`, requestOptions)
         let body = await response.json();
         const game = body.game
         const players = []
@@ -65,7 +66,9 @@ export default class Game extends Component {
     }
 
     componentDidMount() {
-        this.getGame()
+        const id = window.location.pathname.split('/').at(-1)
+        this.getGame(id)
+        
     }
 
     markDiceToRoll(diceID) {
@@ -132,7 +135,7 @@ export default class Game extends Component {
     }
 
     render() {
-
+        console.log(this)
         const alertMessage = this.state.alertMessage ? <AlertMessage elems={this.state.alertMessage} /> : ''
 
         const mug = this.state.mug.map(dice => <Dice 

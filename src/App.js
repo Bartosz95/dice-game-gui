@@ -9,6 +9,7 @@ import Navbar from './components/navbar/Navbar'
 import Home from './components/home/home';
 import Games from './components/games/games';
 import Create from './components/create/create';
+import Game from './components/game/game';
 
 class App extends Component {
 
@@ -50,6 +51,7 @@ class App extends Component {
           <Route path="/" element={ <Home keycloak={this.state.keycloak}/> } />
           <Route path="/games" element={ <Games keycloak={this.state.keycloak}/> } />
           <Route path="/create" element={ <Create keycloak={this.state.keycloak}/> } />
+          <Route path="/game/:id" element={ <Game keycloak={this.state.keycloak}/> } />
         </Routes>
       </BrowserRouter>
     </div>
