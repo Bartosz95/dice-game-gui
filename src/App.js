@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
-import { BrowserRouter, Routes, Route, Navigate  } from 'react-router-dom';
+import { BrowserRouter, Routes, Route  } from 'react-router-dom';
+import { Row, Col } from 'react-bootstrap';
 import keycloak from './libs/keycloak';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-import Login from './components/login/login';
+import UserBar from './components/userBar/UserBar';
+import Navbar from './components/navbar/Navbar'
 import Home from './components/home/home';
 
 class App extends Component {
@@ -14,13 +16,12 @@ class App extends Component {
 
   async load() {
     try {
-      const authenticated = await keycloak.init({
-        onLoad: 'check-sso'
-      })
+      await keycloak.init({ onLoad: 'check-sso' })
+      
       if(keycloak.authenticated) {
-        this.setState({ authenticated: authenticated, keycloak: keycloak })
+        this.setState({ keycloak: keycloak })
       } else {
-        this.setState({ authenticated: false })
+        console.log("not auth")
       }
     } catch (err) {
       console.log(err)
@@ -33,12 +34,23 @@ class App extends Component {
   
 
   render() {
-    return <BrowserRouter>
-      <Routes>
-        <Route path="/login" element={ keycloak.authenticated ? <Navigate to="/" /> : <Login keycloak={this.state.keycloak}/>} />
-        <Route path="/" element={ keycloak.authenticated ? <Home keycloak={this.state.keycloak}/> : <Navigate to="/login" /> } />
-      </Routes>
-    </BrowserRouter>
+    return <div>
+      <Row>
+        <Col>
+          <Navbar />
+        </Col>
+        <Col>
+          <UserBar keycloak={this.state.keycloak} />
+        </Col>
+      </Row>
+
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={ <Home keycloak={this.state.keycloak}/> } />
+        </Routes>
+      </BrowserRouter>
+    </div>
   }
+
 }
 export default App;
