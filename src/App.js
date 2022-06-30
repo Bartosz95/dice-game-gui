@@ -8,7 +8,7 @@ import UserBar from './components/userBar/UserBar';
 import Navbar from './components/navbar/Navbar'
 import Home from './components/home/home';
 import Games from './components/games/games';
-import Create from './components/create/create';
+import Create from './components/create/Create';
 import Game from './components/game/game';
 
 class App extends Component {

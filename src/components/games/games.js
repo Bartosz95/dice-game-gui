@@ -1,41 +1,36 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Container, Accordion } from 'react-bootstrap';
 
 import GameInfo from '../gameInfo/gameInfo'
 
-export default class Games extends Component {
+const Games = props => {
 
-  state = {
-    games: []
-  }
-
-  async getGames() {
-    try {
-      const requestOptions = {
-        method: 'GET',
-        headers: {
-            'Authorization': `Bearer ${this.props.keycloak.token}`
-        },
+  const getGames = () => {
+    console.log(props)
+    const requestOptions = {
+      headers: {
+          'Authorization': `Bearer ${props.keycloak.token}`
+      },
+      mode: 'no-cors',
     };
-    const response = await fetch(`${process.env.REACT_APP_DICE_GAME_API}/user/1/game`, requestOptions)
-    let body = await response.json();
-    this.setState({ games: body })
-    } catch (err) {
-      console.log(err)
-    }
-    
+
+    console.log(requestOptions)
+
+    fetch(`http://localhost:3000/api/v1/user/1/game/6269a20f9ac7b2241521cd39`, requestOptions)
+    .then(response => console.log(response))
+    .then(responseData => {console.log(responseData)})
+    .catch(err => {console.log(err) })
   }
 
-  componentDidMount() {
-    this.getGames()
-  }
-
-  render() {
-    const games = this.state.games.map(game => <GameInfo game={game} />)
-    return <Container>
-      <Accordion defaultActiveKey="0">
-        {games}
-      </Accordion>
-    </Container>
-  }
+  useEffect(() => {getGames()}, [])
+  //this.getGames()
+  // const games = this.state.games.map(game => <GameInfo game={game} />)
+  // return <Container>
+  //   <Accordion defaultActiveKey="0">
+  //     {games}
+  //   </Accordion>
+  // </Container>
+  return <div>Games</div>
 }
+
+export default Games
