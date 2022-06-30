@@ -3,7 +3,7 @@ import { DropdownButton, Dropdown, Button } from 'react-bootstrap';
 import './userBar.css'
 const UserBar = props => {
 
-  const [username, setUsers] = useState("")
+  const [username, setUsername] = useState("")
 
   const login = <Button variant="success" className="userBar" onClick={ () => props.keycloak.login() }>Login</Button>
 
@@ -16,7 +16,7 @@ const UserBar = props => {
     try {
       if(props.keycloak.authenticated) {
         const userInfo = await props.keycloak.loadUserInfo()
-        setUsers(userInfo.preferred_username)
+        setUsername(userInfo.preferred_username)
       }
     } catch (err) {
       console.log(err)
