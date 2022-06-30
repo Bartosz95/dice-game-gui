@@ -5,26 +5,28 @@ const Create = props => {
 
   const [users, setUsers] = useState([])
 
-  
-  console.log(props)
-
-  const getUsers = () => {
+  const getUsers = async () => {
+    try {
+      if(props.keycloak.authenticated) {
+        const requestOptions = {
+          method: 'GET',
+          headers: {
+              'Authorization': `Bearer ${props.keycloak.token}`
+          }
+        };
+        console.log(requestOptions)
+        const response = await fetch(`http://localhost:8080/admin/realms/Bartosz/users`, requestOptions)
+        const body = await response.json()
+        setUsers(body.map(user => user.id))
+      }
+    } catch(err) {
+      console.log(err)
+    }
     
-      const requestOptions = {
-        method: 'GET',
-        headers: {
-            'Authorization': `Bearer ${props.keycloak.token}`
-        },
-      };
-      fetch(`http://localhost:8080/admin/master/console/#/realms/Bartosz/users`, requestOptions)
-      .then(response => response.json())
-      .then(responseData => {console.log(responseData)})
-      .catch(err => console.log(err))
-
   }
   useEffect(() => { getUsers() })
 
-  return (<div> Create Game </div>);
+  return (<div> Create Game {users.map(id => <div>{id}</div>)} </div>);
 
 }
 

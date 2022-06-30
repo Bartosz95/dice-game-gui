@@ -4,5 +4,6 @@
   "ssl-required": "external",
   "resource": "dice-game",
   "public-client": true,
-  "confidential-port": 0
+  "confidential-port": 0,
+  "enable-cors": true
 }
