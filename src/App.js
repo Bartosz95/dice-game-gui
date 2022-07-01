@@ -39,7 +39,7 @@ class App extends Component {
     return <div>
       <Row>
         <Col>
-          <Navbar />
+          <Navbar keycloak={this.state.keycloak} />
         </Col>
         <Col>
           <UserBar keycloak={this.state.keycloak} />
