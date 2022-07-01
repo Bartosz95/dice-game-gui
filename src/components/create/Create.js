@@ -23,8 +23,8 @@ const Create = props => {
     } catch(err) {
       console.log(err)
     }
-    
   }
+
   useEffect(() => { getUsers() })
 
   const selectUser = user => {
@@ -49,6 +49,7 @@ const Create = props => {
         };
         const response = await fetch(`${process.env.REACT_APP_DICE_GAME_API}/user/${userId}/game`, requestOptions)
         const body = await response.json();
+        window.location.href = `/game/${body._id}`        
       }
     } catch (err) {
         console.log(err)
@@ -58,7 +59,7 @@ const Create = props => {
   return (
     <div>
     <Container>
-    Select users to game {selectedUsers}
+    Select users for play
     <ListGroup>
       {users.map(user => 
       <ListGroup.Item 
@@ -71,7 +72,7 @@ const Create = props => {
       </ListGroup.Item>)} 
     </ListGroup>
     </Container>
-    Press the button to create game with selected users <br/>
+    <br/>
     <Button
       onClick={ createGame }
       variant="success">

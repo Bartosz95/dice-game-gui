@@ -28,7 +28,7 @@ export default props => {
     <Accordion.Body>
       {props.game.isActive ? "Active" : "Disactive"}<br/>
       Players: {props.game.playerIDs.join(', ')}<br/>
-      <Link to={{ pathname: `/game/${props.game._id}` }} > PLAY </Link>
+      <Button variant="outline-success"  href={`/game/${props.game._id}`} >Play</Button>
       <Button variant="outline-danger" onClick={deleteGame}>Delete</Button>{' '}
     </Accordion.Body>
   </Accordion.Item>
