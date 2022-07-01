@@ -51,7 +51,7 @@ class App extends Component {
           <Route path="/" element={ <Home keycloak={this.state.keycloak}/> } />
           <Route path="/games" element={ <Games keycloak={this.state.keycloak}/> } />
           <Route path="/create" element={ <Create keycloak={this.state.keycloak}/> } />
-          <Route path="/game/:id" element={ <Game keycloak={this.state.keycloak}/> } />
+          <Route path="/:id" element={ <Game keycloak={this.state.keycloak}/> } />
         </Routes>
       </BrowserRouter>
     </div>

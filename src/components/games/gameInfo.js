@@ -1,6 +1,5 @@
 import React from 'react';
 import { Accordion, Button } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
 
 export default props => {
 
@@ -28,7 +27,7 @@ export default props => {
     <Accordion.Body>
       {props.game.isActive ? "Active" : "Disactive"}<br/>
       Players: {props.game.playerIDs.join(', ')}<br/>
-      <Button variant="outline-success"  href={`/game/${props.game._id}`} >Play</Button>
+      <Button variant="outline-success"  href={`/${props.game._id}`} >Play</Button>
       <Button variant="outline-danger" onClick={deleteGame}>Delete</Button>{' '}
     </Accordion.Body>
   </Accordion.Item>
