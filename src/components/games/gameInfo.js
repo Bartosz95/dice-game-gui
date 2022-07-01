@@ -2,11 +2,34 @@ import React from 'react';
 import { Accordion, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
-export default props => <Accordion.Item eventKey={props.game._id}>
-  <Accordion.Header>Game {props.game._id}</Accordion.Header>
+export default props => {
+
+  const deleteGame = async () => {
+    try {
+      if(props.keycloak.authenticated) {
+        const requestOptions = {
+            method: 'DELETE',
+            headers: { 
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${props.keycloak.token}`
+            }
+        };
+        const userInfo = await props.keycloak.loadUserInfo()
+        const response = await fetch(`${process.env.REACT_APP_DICE_GAME_API}/user/${userInfo.sub}/game/${props.game._id}`, requestOptions)
+        const body = await response.json();
+      }
+    } catch (err) {
+        console.log(err)
+    }
+  }
+
+  return <Accordion.Item eventKey={props.game._id}>
+    <Accordion.Header>Game {props.game._id}</Accordion.Header>
     <Accordion.Body>
-       {props.game.isActive ? "Active" : "Disactive"}<br/>
-       Players: {props.game.playerIDs.join(', ')}<br/>
-       <Link to={{ pathname: `/game/${props.game._id}` }} > PLAY </Link>
+      {props.game.isActive ? "Active" : "Disactive"}<br/>
+      Players: {props.game.playerIDs.join(', ')}<br/>
+      <Link to={{ pathname: `/game/${props.game._id}` }} > PLAY </Link>
+      <Button variant="outline-danger" onClick={deleteGame}>Delete</Button>{' '}
     </Accordion.Body>
-</Accordion.Item>
+  </Accordion.Item>
+}

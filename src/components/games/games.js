@@ -3,7 +3,7 @@ import { Container, Accordion } from 'react-bootstrap';
 
 import GameInfo from './gameInfo'
 
-const Games = props => {
+export default props => {
 
   const [games, setGames] = useState([])
 
@@ -26,8 +26,8 @@ const Games = props => {
   useEffect(() => { getGames() })
 
   return <Container>
-    { games.map(game => <GameInfo key={game._id} game={game} />) }
+    <Accordion>
+      { games.map(game => <GameInfo key={game._id} game={game} keycloak={props.keycloak} />) }
+    </Accordion>
   </Container>
 }
-
-export default Games
